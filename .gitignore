@@ -1,0 +1,8 @@
+.idea
+.ll_env/
+manage.py
+*.sqlite3
+*.pyc
+__pycache__
+learning_log/
+
