@@ -23,7 +23,7 @@ def topic(request, topic_id):
     """ Show a single topic, and all its entries."""
     topic = Topic.objects.get(id=topic_id)
     # Make sure the topic belongs to the current user.
-    if not check_topic_owner(topic, request.user):
+    if not onwer_topic(topic, request.user):
         raise Http404
 
     #if topic.owner != request.user:
@@ -59,6 +59,9 @@ def new_topic(request):
 def new_entry(request, topic_id):
     """Add a new entry related to a specifically topic."""
     topic = Topic.objects.get(id=topic_id)
+    if not onwer_topic(topic, request.user):
+        raise Http404
+
     if request.method != 'POST':
         # No date submitted; create a blank form.
         form = EntryForm()
@@ -79,7 +82,7 @@ def edit_entry(request, entry_id):
     entry = Entry.objects.get(id=entry_id)
     topic = entry.topic
     # Make sure the topic belongs to the current user.
-    if not check_topic_owner(topic, request.user):
+    if not onwer_topic(topic, request.user):
         raise Http404
 
     #if topic.owner != request.user:
@@ -100,7 +103,7 @@ def edit_entry(request, entry_id):
     return render(request, 'learning_logs/edit_entry.html', context)
 
 
-def check_topic_owner(topic_owner, user):
+def onwer_topic(topic_owner, user):
     return topic_owner.owner == user
 
 
